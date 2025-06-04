@@ -7,6 +7,8 @@ import io
 from io import BytesIO
 import os
 import textwrap
+import tempfile
+import os
 
 @register(name="SteamHotSales", description="获取Steam热销榜单(图片版)", version="0.4", author="Assistant")
 class SteamHotSalesPlugin(BasePlugin):
@@ -154,10 +156,7 @@ class SteamHotSalesPlugin(BasePlugin):
             y += 250
 
         # 保存为临时文件
-        import tempfile
-        import os
-    
-        temp_dir = tempfile.gettempdir()
+        temp_dir = '/app/plugins/SteamHotSales/fonts/'
         temp_file = os.path.join(temp_dir, f"steam_hot_sales_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png")
         
         image.save(temp_file, format='PNG', quality=95)
