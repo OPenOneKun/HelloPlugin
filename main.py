@@ -153,11 +153,15 @@ class SteamHotSalesPlugin(BasePlugin):
 
             y += 250
 
-        # 转换图片为字节流
-        img_byte_arr = io.BytesIO()
-        image.save(img_byte_arr, format='PNG', quality=95)
-        img_byte_arr.seek(0)
-        return img_byte_arr
+        # 保存为临时文件
+        import tempfile
+        import os
+    
+        temp_dir = tempfile.gettempdir()
+        temp_file = os.path.join(temp_dir, f"steam_hot_sales_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png")
+        
+        image.save(temp_file, format='PNG', quality=95)
+        return temp_file
 
     @handler(PersonNormalMessageReceived)
     async def person_normal_message_received(self, ctx: EventContext):
@@ -166,9 +170,14 @@ class SteamHotSalesPlugin(BasePlugin):
             self.ap.logger.debug(f"正在获取Steam热销榜 - 请求来自: {ctx.event.sender_id}")
             games_info = self.get_steam_top_sellers()
             if games_info:
-                img_bytes = self.create_game_image(games_info)
-                if img_bytes:
-                    ctx.add_return("image", [img_bytes])
+                image_url = self.create_game_image(games_info)
+                if image_url:
+                     # 构建消息链并发送图片
+                    message_chain = [Image(path=image_url)]
+                    await ctx.send_message(
+                        ctx.event.launcher_type,
+                        str(ctx.event.launcher_id),
+                        message_chain)
                 else:
                     ctx.add_return("reply", ["生成图片失败，请稍后再试"])
             else:
@@ -182,9 +191,14 @@ class SteamHotSalesPlugin(BasePlugin):
             self.ap.logger.debug(f"正在获取Steam热销榜 - 请求来自群: {ctx.event.group_id}")
             games_info = self.get_steam_top_sellers()
             if games_info:
-                img_bytes = self.create_game_image(games_info)
-                if img_bytes:
-                    ctx.add_return("image", [img_bytes])
+                image_url = self.create_game_image(games_info)
+                if image_url:
+                     # 构建消息链并发送图片
+                    message_chain = [Image(path=image_url)]
+                    await ctx.send_message(
+                        ctx.event.launcher_type,
+                        str(ctx.event.launcher_id),
+                        message_chain)
                 else:
                     ctx.add_return("reply", ["生成图片失败，请稍后再试"])
             else:
