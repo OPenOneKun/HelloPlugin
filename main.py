@@ -16,12 +16,12 @@ class SteamHotSalesPlugin(BasePlugin):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         }
         # 设置字体路径，需要替换为实际的字体文件路径
-        self.font_path = "./fonts/font.ttf"  # 微软雅黑字体
+        self.font_path = "/app/plugins/SteamHotSales/fonts/font.ttf"  # 微软雅黑字体
         self.ensure_font_exists()
 
     def ensure_font_exists(self):
         """确保字体文件存在"""
-        font_dir = "./fonts"
+        font_dir = "/app/plugins/SteamHotSales/fonts"
         if not os.path.exists(font_dir):
             os.makedirs(font_dir)
         if not os.path.exists(self.font_path):
