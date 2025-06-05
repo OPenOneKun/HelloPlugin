@@ -156,7 +156,8 @@ class SteamHotSalesPlugin(BasePlugin):
             y += 250
 
         # 保存为临时文件
-        temp_dir = '/app/plugins/SteamHotSales/fonts/'
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        temp_dir = os.path.join(current_dir, 'fonts')
         temp_file = os.path.join(temp_dir, f"steam_hot_sales_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png")
         
         image.save(temp_file, format='PNG', quality=95)
